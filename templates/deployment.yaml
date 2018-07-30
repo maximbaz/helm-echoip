@@ -12,7 +12,6 @@ spec:
   selector:
     matchLabels:
       app: {{ template "ipd.name" . }}
-      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
@@ -23,17 +22,40 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/opt/ipd"]
+          args:
+            {{ if .Values.countryDbPath }}
+            - '--country-db={{ .Values.countryDbPath }}'
+            {{ end }}
+            {{ if .Values.cityDbPath }}
+            - '--city-db={{ .Values.cityDbPath }}'
+            {{ end }}
+            {{ if .Values.listenAddr }}
+            - '--listen={{ .Values.listenAddr }}'
+            {{ end }}
+            {{ if .Values.useReverseLookup }}
+            - '--reverse-lookup'
+            {{ end }}
+            {{ if .Values.usePortLookup }}
+            - '--port-lookup'
+            {{ end }}
+            {{ if .Values.templateFilePath }}
+            - '--template-file="{{ .Values.templateFilePath }}"'
+            {{ end }}
+            {{ if .Values.trustedHeader }}
+            - '--trusted-header="{{ .Values.trustedHeader }}"'
+            {{ end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
