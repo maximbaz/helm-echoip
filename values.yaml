@@ -9,6 +9,9 @@ service:
   type: ClusterIP
   port: 80
 
+ingressType: traefik
+host: ipd.example.com
+
 port: 8080
 listenAddr: ":8080"
 
