@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "ipd.fullname" . }}
+  labels:
+    app: {{ template "ipd.name" . }}
+    chart: {{ template "ipd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingressType }}
+spec:
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "ipd.fullname" . }}
+              servicePort: {{ .Values.service.port }}
