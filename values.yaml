@@ -12,6 +12,7 @@ service:
 port: 8080
 listenAddr: ":8080"
 
+useGeoDb: true
 useReverseLookup: true
 usePortLookup: true
 trustedHeader: "X-Forwarded-For"

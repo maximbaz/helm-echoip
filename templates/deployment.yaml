@@ -17,6 +17,8 @@ spec:
       labels:
         app: {{ template "ipd.name" . }}
         release: {{ .Release.Name }}
+      annotations:
+        checksum/configmap-init-tools: {{ include (print $.Template.BasePath "/configmap-init-tools.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -24,11 +26,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/opt/ipd"]
           args:
-            {{ if .Values.countryDbPath }}
-            - '--country-db={{ .Values.countryDbPath }}'
-            {{ end }}
-            {{ if .Values.cityDbPath }}
-            - '--city-db={{ .Values.cityDbPath }}'
+            {{ if .Values.useGeoDb }}
+            - '--country-db=/db/GeoLite2-Country.mmdb'
+            - '--city-db=/db/GeoLite2-City.mmdb'
             {{ end }}
             {{ if .Values.listenAddr }}
             - '--listen={{ .Values.listenAddr }}'
@@ -49,6 +49,11 @@ spec:
             - name: http
               containerPort: {{ .Values.port }}
               protocol: TCP
+          {{ if .Values.useGeoDb }}
+          volumeMounts:
+            - mountPath: /db
+              name: db-volume
+          {{ end }}
           livenessProbe:
             httpGet:
               path: /health
@@ -59,6 +64,25 @@ spec:
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      {{ if .Values.useGeoDb }}
+      initContainers:
+        - name: {{ .Chart.Name }}-init-db
+          image: busybox
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/tools/init-db.sh"]
+          volumeMounts:
+            - mountPath: /db
+              name: db-volume
+            - mountPath: /tools
+              name: init-tools-volume
+      volumes:
+        - name: db-volume
+          emptyDir: {}
+        - name: init-tools-volume
+          configMap:
+            name: ipd-init-tools
+            defaultMode: 0744
+      {{ end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
