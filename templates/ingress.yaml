@@ -9,6 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingressType }}
+    {{ if .Values.ingress_annotations }}
+{{ toYaml .Values.ingress_annotations | indent 4 }}
+    {{ end }}
 spec:
   rules:
     - host: {{ .Values.host }}

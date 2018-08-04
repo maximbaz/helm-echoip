@@ -1,0 +1,8 @@
+ingress_annotations:
+  traefik.ingress.kubernetes.io/rate-limit: |
+    extractorfunc: client.ip
+    rateset:
+      rate:
+        period: 30s
+        average: 5
+        burst: 5
