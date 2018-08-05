@@ -1,0 +1,36 @@
+{{ if .Values.useGeoDb }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "ipd.fullname" . }}-init-db
+  labels:
+    app: {{ template "ipd.name" . }}
+    chart: {{ template "ipd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: {{ template "ipd.fullname" . }}-init-db
+          image: busybox
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/tools/update-db.sh"]
+          volumeMounts:
+            - mountPath: /tools
+              name: tools-volume
+            - mountPath: /db-shared
+              name: db-shared-volume
+      volumes:
+        - name: tools-volume
+          configMap:
+            name: {{ template "ipd.fullname" . }}-tools
+            defaultMode: 0744
+        - name: db-shared-volume
+          persistentVolumeClaim:
+            claimName: {{ template "ipd.fullname" . }}-db
+{{ end }}

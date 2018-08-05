@@ -55,6 +55,8 @@ spec:
           {{ if .Values.useGeoDb }}
             - mountPath: /db
               name: db-volume
+            - mountPath: /db-shared
+              name: db-shared-volume
           {{ end }}
           livenessProbe:
             exec:
@@ -72,10 +74,12 @@ spec:
         - name: {{ .Chart.Name }}-init-db
           image: busybox
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/tools/update-db.sh", "init"]
+          command: ["/tools/init-db.sh"]
           volumeMounts:
             - mountPath: /db
               name: db-volume
+            - mountPath: /db-shared
+              name: db-shared-volume
             - mountPath: /tools
               name: tools-volume
       {{ end }}
@@ -86,6 +90,8 @@ spec:
             defaultMode: 0744
         {{ if .Values.useGeoDb }}
         - name: db-volume
+          emptyDir: {}
+        - name: db-shared-volume
           persistentVolumeClaim:
             claimName: {{ template "ipd.fullname" . }}-db
         {{ end }}

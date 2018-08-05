@@ -1,6 +1,6 @@
 #!/bin/sh
 
-dir="/db"
+dir="/db-shared"
 cd "$dir" || exit 2
 
 if [ "$1" = "init" ] && [ -f GeoLite2-City.mmdb ] && [ -f GeoLite2-Country.mmdb ]; then

@@ -9,6 +9,8 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   liveness.sh: |
-{{ .Files.Get "files/liveness.sh"  | indent 4 }}
+{{ .Files.Get "files/liveness.sh" | indent 4 }}
   update-db.sh: |
-{{ .Files.Get "files/update-db.sh"  | indent 4 }}
+{{ .Files.Get "files/update-db.sh" | indent 4 }}
+  init-db.sh: |
+{{ .Files.Get "files/init-db.sh" | indent 4 }}

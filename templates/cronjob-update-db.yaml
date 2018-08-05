@@ -23,14 +23,14 @@ spec:
               volumeMounts:
                 - mountPath: /tools
                   name: tools-volume
-                - mountPath: /db
-                  name: db-volume
+                - mountPath: /db-shared
+                  name: db-shared-volume
           volumes:
             - name: tools-volume
               configMap:
                 name: {{ template "ipd.fullname" . }}-tools
                 defaultMode: 0744
-            - name: db-volume
+            - name: db-shared-volume
               persistentVolumeClaim:
                 claimName: {{ template "ipd.fullname" . }}-db
 {{ end }}
