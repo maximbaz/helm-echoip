@@ -1,0 +1,36 @@
+{{ if .Values.useGeoDb }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "ipd.fullname" . }}-update-db
+  labels:
+    app: {{ template "ipd.name" . }}
+    chart: {{ template "ipd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: "0 12 8 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: {{ template "ipd.fullname" . }}-update-db
+              image: busybox
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["/tools/update-db.sh"]
+              volumeMounts:
+                - mountPath: /tools
+                  name: tools-volume
+                - mountPath: /db
+                  name: db-volume
+          volumes:
+            - name: tools-volume
+              configMap:
+                name: {{ template "ipd.fullname" . }}-tools
+                defaultMode: 0744
+            - name: db-volume
+              persistentVolumeClaim:
+                claimName: {{ template "ipd.fullname" . }}-db
+{{ end }}
