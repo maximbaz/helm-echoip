@@ -19,3 +19,5 @@ useGeoDb: true
 useReverseLookup: true
 usePortLookup: true
 trustedHeader: "X-Forwarded-For"
+
+storageClassName: azurefile

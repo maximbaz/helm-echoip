@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "ipd.fullname" . }}-init-tools
+  name: {{ template "ipd.fullname" . }}-tools
   labels:
     app: {{ template "ipd.name" . }}
     chart: {{ template "ipd.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  init-db.sh: |
-{{ .Files.Get "files/init-db.sh"  | indent 4 }}
+  liveness.sh: |
+{{ .Files.Get "files/liveness.sh"  | indent 4 }}
+  update-db.sh: |
+{{ .Files.Get "files/update-db.sh"  | indent 4 }}
