@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "ipd.fullname" . }}
+  name: {{ template "echoip.fullname" . }}
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "ipd.name" . }}
+    app: {{ template "echoip.name" . }}
     release: {{ .Release.Name }}

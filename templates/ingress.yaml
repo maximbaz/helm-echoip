@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "ipd.fullname" . }}
+  name: {{ template "echoip.fullname" . }}
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
@@ -18,5 +18,5 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ template "ipd.fullname" . }}
+              serviceName: {{ template "echoip.fullname" . }}
               servicePort: {{ .Values.service.port }}

@@ -2,10 +2,10 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "ipd.fullname" . }}-update-db
+  name: {{ template "echoip.fullname" . }}-update-db
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -16,7 +16,7 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-            - name: {{ template "ipd.fullname" . }}-update-db
+            - name: {{ template "echoip.fullname" . }}-update-db
               image: busybox
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command: ["/tools/update-db.sh"]
@@ -28,9 +28,9 @@ spec:
           volumes:
             - name: tools-volume
               configMap:
-                name: {{ template "ipd.fullname" . }}-tools
+                name: {{ template "echoip.fullname" . }}-tools
                 defaultMode: 0744
             - name: db-shared-volume
               persistentVolumeClaim:
-                claimName: {{ template "ipd.fullname" . }}-db
+                claimName: {{ template "echoip.fullname" . }}-db
 {{ end }}

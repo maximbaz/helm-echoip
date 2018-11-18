@@ -1,21 +1,21 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ template "ipd.fullname" . }}
+  name: {{ template "echoip.fullname" . }}
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "ipd.name" . }}
+      app: {{ template "echoip.name" . }}
   template:
     metadata:
       labels:
-        app: {{ template "ipd.name" . }}
+        app: {{ template "echoip.name" . }}
         release: {{ .Release.Name }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
@@ -24,7 +24,7 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/opt/ipd"]
+          command: ["/opt/echoip"]
           args:
             {{ if .Values.useGeoDb }}
             - '--country-db=/db/GeoLite2-Country.mmdb'
@@ -86,14 +86,14 @@ spec:
       volumes:
         - name: tools-volume
           configMap:
-            name: {{ template "ipd.fullname" . }}-tools
+            name: {{ template "echoip.fullname" . }}-tools
             defaultMode: 0744
         {{ if .Values.useGeoDb }}
         - name: db-volume
           emptyDir: {}
         - name: db-shared-volume
           persistentVolumeClaim:
-            claimName: {{ template "ipd.fullname" . }}-db
+            claimName: {{ template "echoip.fullname" . }}-db
         {{ end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

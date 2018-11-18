@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "ipd.fullname" . }}-tools
+  name: {{ template "echoip.fullname" . }}-tools
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:

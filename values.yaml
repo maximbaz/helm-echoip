@@ -1,7 +1,7 @@
 replicaCount: 3
 
 image:
-  repository: maximbaz/ipd
+  repository: mpolden/echoip
   tag: latest
   pullPolicy: Always
 
@@ -10,7 +10,7 @@ service:
   port: 80
 
 ingressType: traefik
-host: ipd.example.com
+host: echoip.example.com
 
 port: 8080
 listenAddr: ":8080"

@@ -1,4 +1,4 @@
 apiVersion: v1
-description: A Helm chart for ipd
-name: ipd
+description: A Helm chart for echoip
+name: echoip
 version: 1.0.0

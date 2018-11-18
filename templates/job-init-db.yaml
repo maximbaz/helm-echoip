@@ -2,21 +2,21 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "ipd.fullname" . }}-init-db
+  name: {{ template "echoip.fullname" . }}-init-db
   labels:
-    app: {{ template "ipd.name" . }}
-    chart: {{ template "ipd.chart" . }}
+    app: {{ template "echoip.name" . }}
+    chart: {{ template "echoip.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:
       restartPolicy: OnFailure
       containers:
-        - name: {{ template "ipd.fullname" . }}-init-db
+        - name: {{ template "echoip.fullname" . }}-init-db
           image: busybox
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/tools/update-db.sh"]
@@ -28,9 +28,9 @@ spec:
       volumes:
         - name: tools-volume
           configMap:
-            name: {{ template "ipd.fullname" . }}-tools
+            name: {{ template "echoip.fullname" . }}-tools
             defaultMode: 0744
         - name: db-shared-volume
           persistentVolumeClaim:
-            claimName: {{ template "ipd.fullname" . }}-db
+            claimName: {{ template "echoip.fullname" . }}-db
 {{ end }}
