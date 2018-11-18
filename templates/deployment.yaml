@@ -24,26 +24,25 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/opt/echoip"]
+          command: ["/tools/entrypoint.sh"]
           args:
             {{ if .Values.useGeoDb }}
-            - '--country-db=/db-shared/GeoLite2-Country.mmdb'
-            - '--city-db=/db-shared/GeoLite2-City.mmdb'
-            {{ end }}
-            {{ if .Values.listenAddr }}
-            - '--listen={{ .Values.listenAddr }}'
+            - -g
             {{ end }}
             {{ if .Values.useReverseLookup }}
-            - '--reverse-lookup'
+            - -r
             {{ end }}
             {{ if .Values.usePortLookup }}
-            - '--port-lookup'
+            - -p
+            {{ end }}
+            {{ if .Values.listenAddr }}
+            - -l {{ .Values.listenAddr }}
             {{ end }}
             {{ if .Values.templateFilePath }}
-            - '--template-file="{{ .Values.templateFilePath }}"'
+            - -t {{ .Values.templateFilePath }}
             {{ end }}
             {{ if .Values.trustedHeader }}
-            - '--trusted-header="{{ .Values.trustedHeader }}"'
+            - -h {{ .Values.trustedHeader }}
             {{ end }}
           ports:
             - name: http
@@ -69,20 +68,6 @@ spec:
               port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      {{ if .Values.useGeoDb }}
-      initContainers:
-        - name: {{ .Chart.Name }}-init-db
-          image: busybox
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/tools/init-db.sh"]
-          volumeMounts:
-            - mountPath: /db
-              name: db-volume
-            - mountPath: /db-shared
-              name: db-shared-volume
-            - mountPath: /tools
-              name: tools-volume
-      {{ end }}
       volumes:
         - name: tools-volume
           configMap:

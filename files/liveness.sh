@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 url="http://localhost:$1/health"
 if ! wget -q --spider --tries=1 "$url"; then
     echo "Health endpoint is unavailable, restart is needed"

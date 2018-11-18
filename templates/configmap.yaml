@@ -14,3 +14,5 @@ data:
 {{ .Files.Get "files/update-db.sh" | indent 4 }}
   init-db.sh: |
 {{ .Files.Get "files/init-db.sh" | indent 4 }}
+  entrypoint.sh: |
+{{ .Files.Get "files/entrypoint.sh" | indent 4 }}

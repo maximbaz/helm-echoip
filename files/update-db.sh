@@ -29,8 +29,8 @@ download() {
 
 download "GeoLite2-City"
 download "GeoLite2-Country"
-mv ./* "$dir"
+mv ./* "$dir" || exit 6
 
-cd "$dir" || exit 6
+cd "$dir" || exit 7
 rm -rf "$procdir"
 echo "Update DB completed"

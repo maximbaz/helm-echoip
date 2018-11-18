@@ -6,7 +6,7 @@ while [  $(find /db-shared -maxdepth 1 -type f | wc -l) != 4 ]; do
     sleep 5
 done
 
-echo "Copying GeoDB MD5 hashes from /db-shared to /db"
-cp /db-shared/*.md5 /db
+echo "Copying GeoDB files from /db-shared to /db"
+cp /db-shared/* /db
 
 echo "Init DB completed"
