@@ -27,8 +27,8 @@ spec:
           command: ["/opt/echoip"]
           args:
             {{ if .Values.useGeoDb }}
-            - '--country-db=/db/GeoLite2-Country.mmdb'
-            - '--city-db=/db/GeoLite2-City.mmdb'
+            - '--country-db=/db-shared/GeoLite2-Country.mmdb'
+            - '--city-db=/db-shared/GeoLite2-City.mmdb'
             {{ end }}
             {{ if .Values.listenAddr }}
             - '--listen={{ .Values.listenAddr }}'

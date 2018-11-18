@@ -12,6 +12,6 @@ city_md5="GeoLite2-City.mmdb.md5"
 country_md5="GeoLite2-Country.mmdb.md5"
 
 if grep -Fxvf "/db-shared/$city_md5" "/db/$city_md5" || grep -Fxvf "/db-shared/$country_md5" "/db/$country_md5"; then
-    echo "GeoDB files differ, restart is needed"
+    echo "GeoDB files were updated, a restart is needed"
     exit 3
 fi

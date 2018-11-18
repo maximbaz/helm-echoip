@@ -1,11 +1,12 @@
 #!/bin/sh
 
-echo "Waiting for 4 GeoDB files to be available in /db-shared"
+echo "Init DB started"
 while [  $(find /db-shared -maxdepth 1 -type f | wc -l) != 4 ]; do
-    sleep 1
+    echo "Waiting for 4 GeoDB files to be available in /db-shared"
+    sleep 5
 done
 
-echo "Copying GeoDB files from /db-shared to /db"
-cp /db-shared/Geo* /db
+echo "Copying GeoDB MD5 hashes from /db-shared to /db"
+cp /db-shared/*.md5 /db
 
-echo "Initialization complete"
+echo "Init DB completed"
